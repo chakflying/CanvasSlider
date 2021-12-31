@@ -339,7 +339,7 @@ var CS2 = new CanvasSlider({
 
 var CS3 = new CanvasSlider({
   canvas: "myCanvas3",
-  range: {min: 0, max: 100, step: 1},
+  range: {custom: "time"},
   start: [40,70],
   snapToTicks: true,
   showLabels: true,
@@ -347,10 +347,10 @@ var CS3 = new CanvasSlider({
   showMinorTicks: false,
   showToolTip: false,
   showValueBox: true,
-  format: {decimals: 0, prefix: "", suffix: "%"},
+  format: {decimals: 0, prefix: "", suffix: ""},
   baseColor: {h: 136, s: 50, v: 90},
   handle: {shape: "rectangle", w: 10, h: 20, hue: 136},
-  gradientFill: true,
+  gradientFill: false,
 });
 
 function testChanges() {

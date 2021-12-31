@@ -971,11 +971,17 @@
             if (iRange.length < 2) values = [0,100]; else values = iRange;
          }
          if (!isArray) {
-            if (iRange.hasOwnProperty("min")) var rmin = iRange.min; else rmin = 0;
-            if (iRange.hasOwnProperty("max")) var rmax = iRange.max; else rmax = rmin + 100;
-            values = [rmin, rmax];
-            if (iRange.hasOwnProperty("step")) values = linSpaceS(rmin, rmax, iRange.step);
-            if (iRange.hasOwnProperty("count")) values = linSpaceN(rmin, rmax, iRange.count);
+            if (iRange.hasOwnProperty("custom")) {
+               if (iRange.custom == "time") {
+                  values = linSpaceS(0, 1440, 1);
+               }
+            } else {
+               if (iRange.hasOwnProperty("min")) var rmin = iRange.min; else rmin = 0;
+               if (iRange.hasOwnProperty("max")) var rmax = iRange.max; else rmax = rmin + 100;
+               values = [rmin, rmax];
+               if (iRange.hasOwnProperty("step")) values = linSpaceS(rmin, rmax, iRange.step);
+               if (iRange.hasOwnProperty("count")) values = linSpaceN(rmin, rmax, iRange.count);
+            }
          }
          // Sort array (to be sure of increasing values)
          values.sort(function(a, b){return a-b});
