@@ -73,6 +73,7 @@
         this.track.highlightColor = this.color.track.highlight;
         this.track.highlightGradient = this.color.track.highlightGradient;
         this.track.strokeColor = this.color.track.stroke;
+        this.track.gradientFill = this.conf.gradientFill;
 
         this.model.initSliderValues();
         //console.log("VIEW VALUES MODEL VALUES ", this.model.values);
@@ -87,6 +88,7 @@
            sH.fillDrag = this.color.handle.fillDrag
            sH.fillGradient = this.color.handle.fillGradient;
            sH.stroke = this.color.handle.stroke;
+           sH.gradientFill = this.conf.gradientFill;
 
            sH.x = parseFloat(this.model.values[j] - sH.w/2);
            sH.y = parseFloat(this.track.y - (sH.h - this.track.h)/2);
@@ -495,6 +497,7 @@
        this.highlightColor = "#3FB8AF";
        this.highlightGradient = {stop1: "#4CE6D8", stop2: "#369B93"};
        this.strokeColor = "#000";
+       this.gradientFill = false;
 
        this.contains = function(iPoint) {
           var rect = {x: this.x, y: this.y, w: this.w, h: this.h};
@@ -533,8 +536,11 @@
                 var grd = ctx.createLinearGradient(0,sect[j].y+dy,0,sect[j].y+dy + sect[j].h); // vertical gradient
                 grd.addColorStop(0,this.highlightGradient.stop1);
                 grd.addColorStop(1,this.highlightGradient.stop2);
-                ctx.fillStyle = grd;
-                //  ctx.fillStyle = this.highlightColor;
+                if (this.gradientFill) {
+                   ctx.fillStyle = grd;
+                } else {
+                    ctx.fillStyle = this.highlightColor;
+                }
                 ctx.roundRect(sect[j].x+dx, sect[j].y+dy, sect[j].w, sect[j].h, 3).fill();
              }
           }
@@ -755,6 +761,7 @@
       isDragging: false,
       fillDrag: "#FFF",
       fillGradient: {stop1: "#4CE6D8", stop2: "#369B93"},
+      gradientFill: false,
       contains: function(iPoint) {
          var rect = {x: this.x, y: this.y, w: this.w, h: this.h};
          return pointInRect(rect, iPoint);
@@ -765,8 +772,11 @@
          var grd = ctx.createLinearGradient(0,this.y+dy,0,this.y+dy + this.h); // vertical gradient
          grd.addColorStop(0,this.fillGradient.stop1);
          grd.addColorStop(1,this.fillGradient.stop2);
-         ctx.fillStyle = grd;
-         // ctx.fillStyle = this.fill;
+         if (this.gradientFill) {
+            ctx.fillStyle = grd;
+         } else {
+            ctx.fillStyle = this.fill;
+         }
          if (this.isDragging) { ctx.fillStyle = this.fillDrag;}
          if (this.shape == "rectangle") {
             ctx.lineWidth = 1.2; 
@@ -829,6 +839,7 @@
       this.conf.handle = {shape: "rectangle", w: 20, h: 20, hue: null};   // shape of handle 
       this.conf.format = {decimals: 0, prefix: "", suffix: ""};  // Simple number formatting 
       this.conf.baseColor = {h: 207, s: 60, v: 100};  // Defines color scheme. Valid HSV color.
+      this.conf.gradientFill = false;  // Use gradient fill instead of solid color.
       // The following config properties can be updated on the fly.
       this.conf.disabled = false;
       this.conf.onChange = null;      // Event fired if slider value changed (parm: index, value)
@@ -882,6 +893,7 @@
          confView.showMinorTicks = this.conf.showMinorTicks;
          confView.showToolTip = this.conf.showToolTip;
          confView.showValueBox = this.conf.showValueBox;
+         confView.gradientFill = this.conf.gradientFill;
 
          this.model = new MODEL(confModel);
          this.view = new VIEW(confView);
