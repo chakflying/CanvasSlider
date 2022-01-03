@@ -109,7 +109,13 @@
            toolTip.x = this.model.values[j] - toolTip.w/2;
            var h28 = 28*u.y;   //0.32*this.canvas.height;
            toolTip.y = this.track.y - h28;
-           toolTip.text = prefix + this.model.pixToReal(this.model.values[j]).toFixed(d) + suffix;
+           if (this.conf.format.hasOwnProperty("custom")) {
+              if (this.conf.format.custom == "time") {
+                 toolTip.text = minutesToTime(this.model.pixToReal(this.model.values[j]).toFixed(0))
+              }
+           } else {
+              toolTip.text = prefix + this.model.pixToReal(this.model.values[j]).toFixed(d) + suffix;
+           }
            this.toolTips.push(toolTip);
         }
 
@@ -122,16 +128,20 @@
            valueBox.w = 26*u.x; 
            valueBox.h = 20*u.y; 
            valueBox.y = this.track.y - 4*u.y;
+           if (this.conf.format.hasOwnProperty("custom")) {
+               if (this.conf.format.custom == "time") {
+                  valueBox.text = minutesToTime(this.model.pixToReal(this.model.values[j]).toFixed(0))
+               }
+            } else {
+               valueBox.text = prefix + this.model.pixToReal(this.model.values[j]).toFixed(d) + suffix;
+            }
            if (j==0) {
              valueBox.x = 2*u.x;
-             valueBox.text = prefix + this.model.pixToReal(this.model.values[j]).toFixed(d) + suffix;
-             this.valueBoxes.push(valueBox);
            }
            if (j==1) {
              valueBox.x = this.track.x + this.track.w + 2;
-             valueBox.text = prefix + this.model.pixToReal(this.model.values[j]).toFixed(d) + suffix;
-             this.valueBoxes.push(valueBox);
-           }
+            }
+            this.valueBoxes.push(valueBox);
            if (j>1) break;
         }
 
@@ -222,11 +232,28 @@
         var h28 = 28*u.y;   //0.32*this.canvas.height;
         thisView.toolTips[idx].x = pxVal - thisView.toolTips[idx].w/2;
         thisView.toolTips[idx].y = thisView.track.y - h28;  // unchanged
-        thisView.toolTips[idx].text = prefix + this.model.pixToReal(pxVal).toFixed(d) + suffix;
+
+         if (this.conf.format.hasOwnProperty("custom")) {
+            if (this.conf.format.custom == "time") {
+               thisView.toolTips[idx].text = minutesToTime(this.model.pixToReal(pxVal).toFixed(0))
+            }
+         } else {
+            thisView.toolTips[idx].text = prefix + this.model.pixToReal(pxVal).toFixed(d) + suffix;
+         }
 
         if (idx==0 || idx==1) {
            thisView.valueBoxes[idx].text = prefix + this.model.pixToReal(pxVal).toFixed(d) + suffix;
+
+           if (this.conf.format.hasOwnProperty("custom")) {
+               if (this.conf.format.custom == "time") {
+                  thisView.valueBoxes[idx].text = minutesToTime(this.model.pixToReal(pxVal).toFixed(0))
+               }
+            } else {
+               thisView.valueBoxes[idx].text = prefix + this.model.pixToReal(pxVal).toFixed(d) + suffix;
+            }
         }
+
+        
 
         thisView.sH[idx].x = pxVal - thisView.sH[idx].w/2;
 
@@ -243,8 +270,18 @@
         ctx.fillStyle = "#000";
         var h28 = 28*u.y; 
         var x10 = 10*u.x; 
-        var strMin = prefix + this.model.re.rmin.toFixed(d) + suffix;
-        var strMax = prefix + this.model.re.rmax.toFixed(d) + suffix;
+
+        if (this.conf.format.hasOwnProperty("custom")) {
+            if (this.conf.format.custom == "time") {
+               var strMin = minutesToTime(this.model.re.rmin.toFixed(0))
+               var strMax = minutesToTime(this.model.re.rmax.toFixed(0))
+            }
+         } else {
+            var strMin = prefix + this.model.re.rmin.toFixed(d) + suffix;
+            var strMax = prefix + this.model.re.rmax.toFixed(d) + suffix;
+         }
+
+
         ctx.fillText(strMin, this.xmin+x10, this.track.y+h28, this.numWidth);  // first label
         ctx.fillText(strMax, this.xmax-x10, this.track.y+h28, this.numWidth);  // last label
         return 0;
@@ -973,7 +1010,7 @@
          if (!isArray) {
             if (iRange.hasOwnProperty("custom")) {
                if (iRange.custom == "time") {
-                  values = linSpaceS(0, 1440, 1);
+                  values = linSpaceS(0, 1440, 5);
                }
             } else {
                if (iRange.hasOwnProperty("min")) var rmin = iRange.min; else rmin = 0;
@@ -1149,6 +1186,14 @@ function linSpaceS(x1, x2, S) {
    }
    return arr;
 }  // linSpaceS()
+
+function minutesToTime(minutes) {
+   // Convert minutes to time string
+   var hours = Math.floor(minutes / 60);
+   var minutes = minutes - hours * 60;
+   var time = hours.toString().padStart(2, '0') + ":" + minutes.toString().padStart(2, '0');
+   return time;
+}  // minutesToTime()
 
 function getRandomColor() {
    var letters = '0123456789ABCDEF';

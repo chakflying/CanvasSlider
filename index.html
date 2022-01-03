@@ -82,7 +82,7 @@
    <h3>DEMO </h3>
    <canvas id="myCanvas1" width=800 height=80  title="slider 1" > </canvas>   <br/> <br/>
    <canvas id="myCanvas2" width=800 height=80  title="slider 2" > </canvas>   <br/> <br/>
-   <canvas id="myCanvas3" width=800 height=45 title="slider 3" ></canvas>   <br/>  
+   <canvas id="myCanvas3" width=800 height=80 title="slider 3" ></canvas>   <br/>  
 
    <!-- TEST
    <button onclick="CS1.setValue(0,-59)(1,-30);"> Set Val </button>   &nbsp; &nbsp;
@@ -342,12 +342,12 @@ var CS3 = new CanvasSlider({
   range: {custom: "time"},
   start: [40,70],
   snapToTicks: true,
-  showLabels: true,
-  showMajorTicks: false,
+  showLabels: false,
+  showMajorTicks: true,
   showMinorTicks: false,
   showToolTip: false,
   showValueBox: true,
-  format: {decimals: 0, prefix: "", suffix: ""},
+  format: {custom: "time"},
   baseColor: {h: 136, s: 50, v: 90},
   handle: {shape: "rectangle", w: 10, h: 20, hue: 136},
   gradientFill: false,
